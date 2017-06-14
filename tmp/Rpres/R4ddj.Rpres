@@ -1,0 +1,41 @@
+Data-driven journalism workflow with R
+========================================================
+author: @duc_qn | swissinfo.ch
+date: 17.06.2017
+autosize: true
+font-family: 'Open Sans'
+
+Outline
+========================================================
+
+For more details on authoring R presentations please visit <https://support.rstudio.com/hc/en-us/articles/200486468>.
+# Outline
+
+- Why having code-based workflow? 
+- R vs Python ()
+- Bullet 2
+- Bullet 3
+https://rstudio-pubs-static.s3.amazonaws.com/27777_55697c3a476640caa0ad2099fe914ae5.html#/
+
+
+Usual workflow for ddj/ data visualisation
+========================================================
+
+
+
+
+
+
+Slide With Code
+========================================================
+
+```{r}
+summary(cars)
+```
+
+Slide With Plot
+========================================================
+
+```{r, echo=FALSE}
+plot(cars)
+```

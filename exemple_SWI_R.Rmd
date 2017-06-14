@@ -1,0 +1,52 @@
+---
+title: "Quelques exemples"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(swiMap)
+library(swiTheme)
+library(magrittr)
+
+communeData <- loadCommunesCHportraits()
+
+zipcode <- loadCHzipcode()
+df <- data.frame(
+  name = zipcode[match(attr(communeData, "communeName"), zipcode$Gemeindename), 'Ortschaftsname'], 
+  communeData, check.names = F)
+# geol <- loadCommunesCHgeographicalLevels() %>% as.data.frame()
+# df <- left_join(df, geol %>% 
+#                   select(name, `Régions linguistiques 2016`, `Régions urbaines / rurales 2000 (1)`))
+
+df %<>% mutate(
+  # langReg = factor(`Régions linguistiques 2016`, labels = c("allemande", "française", "italienne", "romanche")),
+  # Urbain_rural = factor(`Régions urbaines / rurales 2000 (1)`, 
+  #                       labels = c('Ville-centre', 'agglomération', 'Ville isolée', 'Commune rurale')),
+  name = iconv(htmltools::htmlEscape(name, TRUE), "latin1", "UTF-8")
+) 
+
+
+df %>% ggplot(aes(x = `Etrangers en %` , UDC)) + 
+  geom_point(aes(size = Habitants ), alpha = 0.5, colour = swi_col[1]) +
+  swi_theme() + geom_smooth()
+
+library(ggiraph)
+gp <- df %>% ggplot(aes(x = `Etrangers en %` , y = UDC)) + 
+  geom_point_interactive(aes(size = Habitants, tooltip = name), alpha = 0.5, colour = swi_col[1]) + 
+  swi_theme()
+ggiraph(code = {print(gp)})
+
+
+require(rgdal)
+#require(rgeos)
+#require(maptools)
+path.ch <- getPathShp('CH', year = 2015)
+ch <- readOGR(path.ch, layer = 'municipalities-without-lakes')
+ch.df <- formatShp(ch)
+
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file).
